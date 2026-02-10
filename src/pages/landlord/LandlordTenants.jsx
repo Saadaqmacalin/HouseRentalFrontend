@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../services/api';
 import { 
   Users, 
   Search, 
@@ -23,10 +23,7 @@ const LandlordTenants = () => {
   useEffect(() => {
     const fetchTenants = async () => {
       try {
-        const token = localStorage.getItem('landlordToken');
-        const res = await axios.get('/api/landlords/tenants', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        const res = await api.get('/landlords/tenants');
         setTenants(res.data);
       } catch (err) {
         console.error('Error fetching tenants:', err);
@@ -39,14 +36,9 @@ const LandlordTenants = () => {
 
   const handleMarkPaid = async (bookingId) => {
     try {
-      const token = localStorage.getItem('landlordToken');
-      await axios.post(`/api/landlords/mark-paid/${bookingId}`, {}, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await api.post(`/landlords/mark-paid/${bookingId}`, {});
       // Refresh list
-      const res = await axios.get('/api/landlords/tenants', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const res = await api.get('/landlords/tenants');
       setTenants(res.data);
     } catch (err) {
       console.error('Error marking as paid:', err);

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserCheck, Mail, Lock, Phone, CreditCard, MapPin, Loader2, ArrowLeft } from 'lucide-react';
-import axios from 'axios';
+import api from '../services/api';
 
 const LandlordAuth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -29,8 +29,8 @@ const LandlordAuth = () => {
     setError('');
 
     try {
-      const endpoint = isLogin ? '/api/auth/landlord/login' : '/api/auth/landlord/register';
-      const response = await axios.post(endpoint, formData);
+      const endpoint = isLogin ? '/auth/landlord/login' : '/auth/landlord/register';
+      const response = await api.post(endpoint, formData);
       
       localStorage.setItem('landlordToken', response.data.token);
       localStorage.setItem('landlordData', JSON.stringify(response.data));

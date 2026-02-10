@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../services/api';
 import { 
   Building2, 
   MapPin, 
@@ -26,10 +26,7 @@ const LandlordHouses = () => {
   const fetchHouses = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('landlordToken');
-      const res = await axios.get(`/api/landlords/houses?page=${currentPage}&limit=${housesPerPage}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const res = await api.get(`/landlords/houses?page=${currentPage}&limit=${housesPerPage}`);
       setHouses(res.data.houses || []);
       setTotalPages(res.data.totalPages || 1);
       setTotalHouses(res.data.total || 0);
@@ -48,10 +45,7 @@ const LandlordHouses = () => {
     if (!window.confirm('Are you sure you want to delete this property? This action cannot be undone.')) return;
     
     try {
-      const token = localStorage.getItem('landlordToken');
-      await axios.delete(`/api/landlords/houses/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await api.delete(`/landlords/houses/${id}`);
       fetchHouses();
     } catch (err) {
       console.error('Error deleting house:', err);

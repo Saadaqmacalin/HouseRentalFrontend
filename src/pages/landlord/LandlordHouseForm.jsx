@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../services/api';
 import { 
   ArrowLeft, 
   MapPin, 
@@ -30,10 +30,7 @@ const LandlordHouseForm = () => {
     if (isEditing) {
       const fetchHouse = async () => {
         try {
-          const token = localStorage.getItem('landlordToken');
-          const res = await axios.get('/api/landlords/houses', {
-            headers: { Authorization: `Bearer ${token}` }
-          });
+          const res = await api.get('/landlords/houses');
           const house = res.data.find(h => h._id === id);
           if (house) setFormData(house);
         } catch (err) {
@@ -48,13 +45,10 @@ const LandlordHouseForm = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const token = localStorage.getItem('landlordToken');
-      const url = isEditing ? `/api/landlords/houses/${id}` : '/api/landlords/houses';
+      const url = isEditing ? `/landlords/houses/${id}` : '/landlords/houses';
       const method = isEditing ? 'put' : 'post';
       
-      await axios[method](url, formData, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await api[method](url, formData);
       
       navigate('/landlord/houses');
     } catch (err) {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../services/api';
 import { 
   Home, 
   Users, 
@@ -22,10 +22,7 @@ const LandlordDashboard = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const token = localStorage.getItem('landlordToken');
-        const res = await axios.get('/api/landlords/stats', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        const res = await api.get('/landlords/stats');
         setStats(res.data);
       } catch (err) {
         console.error('Error fetching stats:', err);
