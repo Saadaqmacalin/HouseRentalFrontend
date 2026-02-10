@@ -32,8 +32,19 @@ const LandlordAuth = () => {
       const endpoint = isLogin ? '/auth/landlord/login' : '/auth/landlord/register';
       const response = await api.post(endpoint, formData);
       
+      // Clear any previous session data
+      localStorage.removeItem('user');
+      localStorage.removeItem('landlordToken');
+      localStorage.removeItem('landlordData');
+      
+      // Set new session data
       localStorage.setItem('landlordToken', response.data.token);
       localStorage.setItem('landlordData', JSON.stringify(response.data));
+      // Sync with user storage used by AuthContext and api.js interceptor
+      localStorage.setItem('user', JSON.stringify({
+        ...response.data,
+        role: 'landlord'
+      }));
       
       navigate('/landlord/dashboard');
     } catch (err) {

@@ -16,6 +16,7 @@ const LandlordLayout = () => {
   const handleLogout = () => {
     localStorage.removeItem('landlordToken');
     localStorage.removeItem('landlordData');
+    localStorage.removeItem('user');
     navigate('/landlord/login');
   };
 
